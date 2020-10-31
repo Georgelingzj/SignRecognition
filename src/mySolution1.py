@@ -132,10 +132,10 @@ def helper(target_topL,target_bottR,xlike_topL,xlike_bottR,Ishape):
     elif(xlike_m > target_m) and (abs(xlike_topL[0]-target_bottR[0])<5) and (target_m < 0.33*Ishape[1] and xlike_m>0.33*Ishape[1]):
         pred_label = "l"
     #distinguish it with second condition
-    elif (xlike_m<target_m) and (abs(xlike_bottR[0]-target_topL[0])<3):
+    elif (xlike_m<target_m) and (abs(xlike_bottR[0]-target_topL[0])<5):
         #middle condition1: xlike is in the left of target
         pred_label = "m"
-    elif (xlike_m>target_m) and (abs(xlike_topL[0]-target_bottR[0])<3):
+    elif (xlike_m>target_m) and (abs(xlike_topL[0]-target_bottR[0])<5):
         #middle condition1: xlike is in the right of target
         pred_label = "m"
     else:
