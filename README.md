@@ -42,7 +42,7 @@
 
 ##### 3.4 Sliding window
 - initial window size 256*256
-- example image ![](./example/7.jpg))
+- example image ![](./example/3.jpg))
 
 ##### 3.5 Find contours
 - example image 
