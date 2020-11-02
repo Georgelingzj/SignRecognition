@@ -53,7 +53,7 @@
 - in mySolution1.py and templateMatch.py with detailed comments
 
 
-##### 4 Performance
+### 4 Performance
 ##### 4.1 Accuracy
 - More than 90% in the 10mins test video
 
