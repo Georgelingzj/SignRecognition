@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2010 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  Original slides: Marcin Wichary (mwichary@google.com)
+  Modifications: Ernest Delgado (ernestd@google.com)
+                 Alex Russell (slightlyoff@chromium.org)
+
+  landslide modifications: Adam Zapletal (adamzap@gmail.com)
+                           Nicolas Perriault (nperriault@gmail.com)
+-->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title><font size = 6>Image Processing In Street Sign Recognition</font></title>
+    <!-- Styles -->
+    
+    <link rel="stylesheet" media="print" href="file:///home/george/.local/lib/python3.8/site-packages/landslide/themes/default/css/print.css">
+    <link rel="stylesheet" media="screen, projection" href="file:///home/george/.local/lib/python3.8/site-packages/landslide/themes/default/css/screen.css">
+    
+    
+    <!-- /Styles -->
+    <!-- Javascripts -->
+    
+    <script type="text/javascript" src="file:///home/george/.local/lib/python3.8/site-packages/landslide/themes/default/js/slides.js"></script>
+    
+    
+    
+    <!-- /Javascripts -->
+</head>
+<body>
+  <div id="blank"></div>
+  <div class="presentation">
+    <div id="current_presenter_notes">
+      <div id="presenter_note"></div>
+    </div>
+    <div class="slides">
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-1">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Image Processing In Street Sign Recognition</font></h1></header>
+            
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              1/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-2">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Workflow</font></h1></header>
+            
+            
+            <section><ul>
+<li>
+<p><font size = 6>Part1: main task</font></p>
+</li>
+<li>
+<p><font size = 6>Part2: Ideas for solving the task</font></p>
+</li>
+<li>
+<p><font size = 6>Part3: Code explanation</font>  </p>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              2/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-3">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part1: Main task</font></h1></header>
+            
+            
+            <section><ul>
+<li><font size = 5>There are three kinds of street sign along both sides of the road</font></li>
+<li><font size = 5>Catch video/real time frame</font>  </li>
+<li><font size = 5>Focus on target area</font>  </li>
+<li>
+<p><font size = 5>Recognize the street sign using opencv(mainly about template match)</font></p>
+</li>
+<li>
+<p><img alt="" src="https://raw.githubusercontent.com/Georgelingzj/SignRecognition/main/presentation/images/sign2.jpg" /></p>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              3/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-4">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part2: Ideas for solving the task</font></h1></header>
+            
+            
+            <section><ul>
+<li><font size = 5>Using <strong>"sliding window"</strong> to get smaller part of the images -- street signs are all along the middle horizontal line</font></li>
+<li><font size = 5>Change <strong>Colour image</strong> to <strong>Binary(gray) image</strong></font></li>
+<li><font size = 5>Using method in opencv to find the <strong>rectangular target area</strong></font></li>
+<li><font size = 5>Using method in opencv to find x-like character and the special character inside the rectangular targer area</font></li>
+<li><font size = 5>Based on coordinates of characters to decide the type of Street sign</font></li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              4/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-5">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part3: Code explanation</font></h1></header>
+            
+            
+            <section><ul>
+<li><font size = 6>How to get a screenshot</font></li>
+<li><font size = 6>How to get a smaller target area</font></li>
+<li><font size = 6>How to change it to gray image and apply threshold</font></li>
+<li><font size = 6>How to find rectangular street sign in the target area</font></li>
+<li><font size = 6>How to match character in target area with templates</font></li>
+<li><font size = 6>How to decide which street sign it is</font></li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              5/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-6">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part3.1: How to get a screenshot</font></h1></header>
+            
+            
+            <section><h2>Traditional way -- usually has 50ms delay</h2>
+<div class="highlight"><pre><span></span><span class="lineno">1 </span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">ImageGrab</span>
+<span class="lineno">2 </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span> 
+<span class="lineno">3 </span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="lineno">4 </span>
+<span class="lineno">5 </span><span class="n">img</span> <span class="o">=</span> <span class="n">ImageGrab</span><span class="o">.</span><span class="n">grab</span><span class="p">(</span><span class="n">bbox</span><span class="o">=</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">))</span>
+<span class="lineno">6 </span><span class="n">img_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="lineno">7 </span><span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">,</span><span class="n">img_np</span><span class="p">)</span>
+<span class="lineno">8 </span><span class="k">if</span> <span class="mh">0xFF</span> <span class="o">&amp;</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">27</span><span class="p">:</span>  
+<span class="lineno">9 </span>    <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+</pre></div>
+
+<h2>My way (only for windows since the simulator runs on windows)</h2>
+<div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="kn">import</span> <span class="nn">mss</span>
+<span class="lineno"> 2 </span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="lineno"> 3 </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="n">sct</span> <span class="o">=</span> <span class="n">mss</span><span class="o">.</span><span class="n">mss</span><span class="p">()</span>
+<span class="lineno"> 6 </span><span class="n">monitor</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">1080</span><span class="p">}</span>
+<span class="lineno"> 7 </span><span class="n">img</span> <span class="o">=</span> <span class="n">sct</span><span class="o">.</span><span class="n">grab</span><span class="p">(</span><span class="n">monitor</span><span class="p">)</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span><span class="n">frame</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">frombytes</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">bgra</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;BGRX&quot;</span><span class="p">)</span>        
+<span class="lineno">10 </span><span class="n">frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+<span class="lineno">11 </span><span class="n">frame</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span><span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">)</span>
+</pre></div>
+</section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              6/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-7">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part3.2: How to get a smaller target area</font></h1></header>
+            
+            
+            <section><div class="highlight"><pre><span></span><span class="lineno">1 </span><span class="k">def</span> <span class="nf">slideWindow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">window_width</span><span class="p">,</span> <span class="n">window_height</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+</pre></div>
+
+<ul>
+<li>
+<p>We can use "sliding window" along the middle horizontal line to get fixed size smaller image</p>
+</li>
+<li>
+<p><img alt="" src="https://raw.githubusercontent.com/Georgelingzj/SignRecognition/main/presentation/images/32.jpg" /></p>
+</li>
+<li>
+<p>Parameter "step" means per moving length of the left edge towards right direction</p>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              7/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-8">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part3.2: How to get a smaller target area</font></h1></header>
+            
+            
+            <section><ul>
+<li><img alt="" src="https://raw.githubusercontent.com/Georgelingzj/SignRecognition/main/presentation/images/32_2.jpg" /></li>
+<li>There are 3 windows plotted in the image above, the successive one move "step length" from the former left edge</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              8/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-9">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part3.2: How to get a smaller target area</font></h1></header>
+            
+            
+            <section><div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="c1">#the middle row of the input image</span>
+<span class="lineno"> 2 </span><span class="n">middleRow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="lineno"> 3 </span><span class="c1">#starting x and y coordinate, 600 -&gt; to find the target faster</span>
+<span class="lineno"> 4 </span><span class="n">startPoint</span> <span class="o">=</span> <span class="p">[</span><span class="mi">600</span><span class="p">,</span><span class="n">middleRow</span><span class="p">]</span>
+<span class="lineno"> 5 </span><span class="n">pred</span> <span class="o">=</span> <span class="s2">&quot;o&quot;</span>
+<span class="lineno"> 6 </span><span class="k">while</span> <span class="n">startPoint</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">window_width</span> <span class="o">&lt;=</span> <span class="n">width</span><span class="p">:</span>
+<span class="lineno"> 7 </span>    <span class="n">h1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">middleRow</span><span class="o">-</span><span class="p">(</span><span class="n">window_height</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+<span class="lineno"> 8 </span>    <span class="n">h2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">middleRow</span><span class="o">+</span><span class="p">(</span><span class="n">window_height</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+<span class="lineno"> 9 </span>    <span class="n">w1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">startPoint</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="lineno">10 </span>    <span class="n">w2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">startPoint</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">window_width</span><span class="p">)</span>
+<span class="lineno">11 </span>    <span class="n">cut</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">h1</span><span class="p">:</span><span class="n">h2</span><span class="p">,</span><span class="n">w1</span><span class="p">:</span><span class="n">w2</span><span class="p">]</span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span>    <span class="n">startPoint</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">step</span>
+<span class="lineno">14 </span>    <span class="n">pred</span> <span class="o">=</span> <span class="n">Solution</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span>
+<span class="lineno">15 </span>    <span class="c1">#as soon as finding label, break.</span>
+<span class="lineno">16 </span>    <span class="k">if</span> <span class="n">pred</span> <span class="o">!=</span> <span class="s2">&quot;o&quot;</span><span class="p">:</span>
+<span class="lineno">17 </span>        <span class="k">break</span>
+</pre></div>
+
+<ul>
+<li>Get the start point</li>
+<li>Initialize the pred(predicted level) to "o" other</li>
+<li>Using while loop move the "window" from left to right</li>
+<li>
+<ul>
+<li>if find label then break the loop </li>
+</ul>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              9/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-10">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part3.3: How to make it gray image and apply threshold</font></h1></header>
+            
+            
+            <section><p><img alt="" src="https://raw.githubusercontent.com/Georgelingzj/SignRecognition/main/presentation/images/33_1.jpg" />
+- cv2.cvtColor(imagename,COLOR_BGR2GRAY)-- we change the channel of the image
+<img alt="" src="https://raw.githubusercontent.com/Georgelingzj/SignRecognition/main/presentation/images/33_2.jpg" />
+- cv2.threshold(imagename, thresh, 255, cv2.THRESH_BINARY)-- we choose thresh = 200 to reduce obvious noise</p></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              10/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-11">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part3.4: How to find rectangular sign in target area</font></h1></header>
+            
+            
+            <section><ul>
+<li><img alt="" src="https://raw.githubusercontent.com/Georgelingzj/SignRecognition/main/presentation/images/33_3.jpg" /></li>
+<li>compared to last images we got, we now are more focus on stree sign. There are less black contents around target area</li>
+<li>The size of current image used to be around 70*40</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              11/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-12">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part3.4: How to find rectangular sign in target area</font></h1></header>
+            
+            
+            <section><div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="c1">#find contours in grey image</span>
+<span class="lineno"> 2 </span><span class="n">C</span><span class="p">,</span><span class="n">h</span><span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findContours</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span><span class="n">cv2</span><span class="o">.</span><span class="n">CHAIN_APPROX_SIMPLE</span><span class="p">)</span>
+<span class="lineno"> 3 </span><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">C</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="lineno"> 4 </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">C</span><span class="p">)):</span>
+<span class="lineno"> 5 </span>        <span class="n">c</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="lineno"> 6 </span>        <span class="n">area</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="lineno"> 7 </span>        <span class="n">rect</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">minAreaRect</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="lineno"> 8 </span>        <span class="n">box</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">boxPoints</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+<span class="lineno"> 9 </span>        <span class="c1"># convert all coordinates floating point values to int</span>
+<span class="lineno">10 </span>        <span class="n">box</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int0</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span>        <span class="c1">#limit the area we interested</span>
+<span class="lineno">13 </span>        <span class="k">if</span> <span class="n">area</span><span class="o">&gt;</span><span class="mi">500</span><span class="p">:</span>
+<span class="lineno">14 </span>            <span class="n">topLeft</span> <span class="o">=</span> <span class="p">[</span><span class="n">box</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">box</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+<span class="lineno">15 </span>            <span class="n">bottomRight</span> <span class="o">=</span> <span class="p">[</span><span class="n">box</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">box</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+<span class="lineno">16 </span>            <span class="c1">#cut the traffic sign with slight remnants around</span>
+<span class="lineno">17 </span>            <span class="n">cut</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">topLeft</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="n">bottomRight</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">topLeft</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">bottomRight</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+</pre></div>
+
+<ul>
+<li>detect the contour of object on the image</li>
+<li>limit the area of contour to find the most likely target area</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              12/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-13">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part3.5: Match character in target area with templates</font></h1></header>
+            
+            
+            <section><ul>
+<li>template1</li>
+<li><img alt="" src="https://raw.githubusercontent.com/Georgelingzj/SignRecognition/main/presentation/images/35_1.jpg" /></li>
+<li>template2</li>
+<li><img alt="" src="https://raw.githubusercontent.com/Georgelingzj/SignRecognition/main/presentation/images/35_2.jpg" /></li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              13/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code slide-14">
+          <div class="inner">
+            
+            <header><h1><font size = 6>Part3.5: Match character in target area with templates</font></h1></header>
+            
+            
+            <section><div class="highlight"><pre><span></span><span class="lineno"> 1 </span><span class="n">METHODS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cv2.TM_CCOEFF&#39;</span><span class="p">,</span> <span class="s1">&#39;cv2.TM_CCOEFF_NORMED&#39;</span><span class="p">,</span> <span class="s1">&#39;cv2.TM_CCORR&#39;</span><span class="p">,</span>
+<span class="lineno"> 2 </span>        <span class="s1">&#39;cv2.TM_CCORR_NORMED&#39;</span><span class="p">,</span> <span class="s1">&#39;cv2.TM_SQDIFF&#39;</span><span class="p">,</span> <span class="s1">&#39;cv2.TM_SQDIFF_NORMED&#39;</span><span class="p">]</span>
+<span class="lineno"> 3 </span>
+<span class="lineno"> 4 </span><span class="n">top_left_pos</span> <span class="o">=</span> <span class="p">()</span>
+<span class="lineno"> 5 </span><span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">METHODS</span><span class="p">:</span>
+<span class="lineno"> 6 </span>    <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="lineno"> 7 </span>    <span class="n">res</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">matchTemplate</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span><span class="n">templ</span><span class="o">=</span><span class="n">template</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+<span class="lineno"> 8 </span>    <span class="n">min_val</span><span class="p">,</span> <span class="n">max_val</span><span class="p">,</span><span class="n">min_loc</span><span class="p">,</span> <span class="n">max_loc</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">minMaxLoc</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+<span class="lineno"> 9 </span>    <span class="c1"># If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum</span>
+<span class="lineno">10 </span>    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">TM_SQDIFF</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">TM_SQDIFF_NORMED</span><span class="p">]:</span>
+<span class="lineno">11 </span>        <span class="n">top_left</span> <span class="o">=</span> <span class="n">min_loc</span>
+<span class="lineno">12 </span>    <span class="k">else</span><span class="p">:</span>
+<span class="lineno">13 </span>        <span class="n">top_left</span> <span class="o">=</span> <span class="n">max_loc</span>
+<span class="lineno">14 </span>    <span class="k">if</span><span class="p">(</span><span class="n">top_left</span><span class="p">):</span>
+<span class="lineno">15 </span>        <span class="n">top_left_pos</span> <span class="o">=</span> <span class="n">top_left</span>
+<span class="lineno">16 </span>        <span class="k">break</span>
+<span class="lineno">17 </span><span class="n">bottom_right_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">w</span><span class="p">,</span> <span class="n">top_left</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span>
+<span class="lineno">18 </span><span class="n">middle_point</span> <span class="o">=</span> <span class="n">top_left</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">w</span>
+<span class="lineno">19 </span><span class="n">left_point</span> <span class="o">=</span> <span class="n">top_left</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="lineno">20 </span><span class="n">right_point</span> <span class="o">=</span> <span class="n">bottom_right_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+<ul>
+<li>there are 6 built-in methods in opencv</li>
+<li>when one of them match successfully, we stop the loop and return the coordinates of top-left and bottom-right point of the character in target area</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              14/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-15">
+          <div class="inner">
+            
+            <header><h1><font size=6>Part3.6: How to decide which street sign it is</font></h1></header>
+            
+            
+            <section><pre><code>!python 
+#if the center point of target appear in the right most 1/3 part
+if(target_m&gt;0.67*Ishape[1]):
+    #left condition1
+    pred_label = "r"
+# xlike is in the right of target,the detected xlike is next to the target, the last one distinguish it with label "m"
+elif (xlike_m&lt;target_m) and (abs(xlike_bottR[0]-target_topL[0])&lt;3) and (target_m &gt; 0.60*Ishape[1] and xlike_m&lt;0.60*Ishape[1]):
+    #left condition2
+    pred_label = "r"
+# xlike is in the left of the target, the detected xlike is next to the target, target is in the left most 1/3 region.
+elif(xlike_m &gt; target_m) and (abs(xlike_topL[0]-target_bottR[0])&lt;5) and (target_m &lt; 0.33*Ishape[1] and xlike_m&gt;0.33*Ishape[1]):
+    pred_label = "l"
+#distinguish it with second condition
+elif (xlike_m&lt;target_m) and (abs(xlike_bottR[0]-target_topL[0])&lt;5):
+    #middle condition1: xlike is in the left of target
+    pred_label = "m"
+elif (xlike_m&gt;target_m) and (abs(xlike_topL[0]-target_bottR[0])&lt;5):
+    #middle condition1: xlike is in the right of target
+    pred_label = "m"
+else:
+    pred_label = "l"
+</code></pre>
+<ul>
+<li>
+<p>simply use the relationship between the coordinates(match results)</p>
+</li>
+<li>
+<p><font size=6 color=red>you can find better ideas!</font></p>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              15/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-16">
+          <div class="inner">
+            
+            
+            <section><ul>
+<li>
+<p>Performance:</p>
+<ul>
+<li>accuracy: more than <strong>92%</strong> in video mode</li>
+<li>latency: around <strong>400-6000</strong> microseconds in video mode</li>
+</ul>
+</li>
+<li>
+<p>Whole code is in <a href="https://github.com/Georgelingzj/SignRecognition">https://github.com/Georgelingzj/SignRecognition</a></p>
+</li>
+<li>
+<p>If you have further question, feel free to send me an email at <a href="georgeling.0330@gmail.com">georgeling.0330@gmail.com</a></p>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              16/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: pre.md -->
+      <div class="slide-wrapper">
+        <div class="slide slide-17">
+          <div class="inner">
+            
+            <header><h1>Thanks for listening</h1></header>
+            
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="pre.md">pre.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              17/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div id="toc" class="sidebar hidden">
+    <h2>Table of Contents</h2>
+    <table>
+      <caption>Table of Contents</caption>
+      
+      <tr id="toc-row-1">
+        <th><a href="#slide1"><font size = 6>Image Processing In Street Sign Recognition</font></a></th>
+        <td><a href="#slide1">1</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-2">
+        <th><a href="#slide2"><font size = 6>Workflow</font></a></th>
+        <td><a href="#slide2">2</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-3">
+        <th><a href="#slide3"><font size = 6>Part1: Main task</font></a></th>
+        <td><a href="#slide3">3</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-4">
+        <th><a href="#slide4"><font size = 6>Part2: Ideas for solving the task</font></a></th>
+        <td><a href="#slide4">4</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-5">
+        <th><a href="#slide5"><font size = 6>Part3: Code explanation</font></a></th>
+        <td><a href="#slide5">5</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-6">
+        <th><a href="#slide6"><font size = 6>Part3.1: How to get a screenshot</font></a></th>
+        <td><a href="#slide6">6</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-7">
+        <th><a href="#slide7"><font size = 6>Part3.2: How to get a smaller target area</font></a></th>
+        <td><a href="#slide7">7</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-8">
+        <th><a href="#slide8"><font size = 6>Part3.2: How to get a smaller target area</font></a></th>
+        <td><a href="#slide8">8</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-9">
+        <th><a href="#slide9"><font size = 6>Part3.2: How to get a smaller target area</font></a></th>
+        <td><a href="#slide9">9</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-10">
+        <th><a href="#slide10"><font size = 6>Part3.3: How to make it gray image and apply threshold</font></a></th>
+        <td><a href="#slide10">10</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-11">
+        <th><a href="#slide11"><font size = 6>Part3.4: How to find rectangular sign in target area</font></a></th>
+        <td><a href="#slide11">11</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-12">
+        <th><a href="#slide12"><font size = 6>Part3.4: How to find rectangular sign in target area</font></a></th>
+        <td><a href="#slide12">12</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-13">
+        <th><a href="#slide13"><font size = 6>Part3.5: Match character in target area with templates</font></a></th>
+        <td><a href="#slide13">13</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-14">
+        <th><a href="#slide14"><font size = 6>Part3.5: Match character in target area with templates</font></a></th>
+        <td><a href="#slide14">14</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-15">
+        <th><a href="#slide15"><font size=6>Part3.6: How to decide which street sign it is</font></a></th>
+        <td><a href="#slide15">15</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-16">
+        <th><a href="#slide16">-</a></th>
+        <td><a href="#slide16">16</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-17">
+        <th><a href="#slide17">Thanks for listening</a></th>
+        <td><a href="#slide17">17</a></td>
+      </tr>
+      
+      
+    </table>
+  </div>
+  
+  <div id="help" class="sidebar hidden">
+    <h2>Help</h2>
+    <table>
+      <caption>Help</caption>
+      <tr>
+        <th>Table of Contents</th>
+        <td>t</td>
+      </tr>
+      <tr>
+        <th>Exposé</th>
+        <td>ESC</td>
+      </tr>
+      <tr>
+        <th>Full screen slides</th>
+        <td>e</td>
+      </tr>
+      <tr>
+        <th>Presenter View</th>
+        <td>p</td>
+      </tr>
+      <tr>
+        <th>Source Files</th>
+        <td>s</td>
+      </tr>
+      <tr>
+        <th>Slide Numbers</th>
+        <td>n</td>
+      </tr>
+      <tr>
+        <th>Toggle screen blanking</th>
+        <td>b</td>
+      </tr>
+      <tr>
+        <th>Show/hide slide context</th>
+        <td>c</td>
+      </tr>
+      <tr>
+        <th>Notes</th>
+        <td>2</td>
+      </tr>
+      <tr>
+        <th>Help</th>
+        <td>h</td>
+      </tr>
+    </table>
+  </div>
+  <script>main()</script>
+</body>
+</html>
